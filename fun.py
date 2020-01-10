@@ -20,8 +20,8 @@ carryOn = True
 
 clock = pygame.time.Clock()
 
-x = 55
-y = 55
+x = 600
+y = 630
 
 fake_x = 120
 fake_y = 120
@@ -62,14 +62,15 @@ while carryOn:
 
 
 
-
+    miku_icon = pygame.image.load("miku_icon_resize.png")
 
 
 
     
     window.blit(image, (0, 0))
-    window.blit(aoligei, (x, y))
-    window.blit(fake_a, (fake_x, fake_y))
+    window.blit(miku_icon, (x, y))
+    #window.blit(aoligei, (x, y))
+    #window.blit(fake_a, (fake_x, fake_y))
     
     pygame.display.flip()
 
