@@ -29,3 +29,13 @@ class buttom:
 
     def draw_active_buttom(self, environment):
         pygame.draw.rect(environment, self.AC, self.position, 0)
+
+    def buttom_is_press(self, environment,  mouse):
+        if(self.return_position().collidepoint(mouse)):
+            self.draw_active_buttom(environment)
+            if(pygame.mouse.get_pressed()[0]):
+                return True
+            
+        else:
+            self.draw_unactive_buttom(environment)
+        return False
