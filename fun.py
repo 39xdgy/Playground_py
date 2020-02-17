@@ -26,10 +26,10 @@ pygame.init()
 size = (1280, 720)
 window = pygame.display.set_mode(size)
 pygame.display.set_caption("My first Game")
-Back_image = pygame.image.load("Background.jpeg")
+Back_image = pygame.image.load("meme_background.jpg")
 
 carryOn = True
-clock = pygame.time.Clock()
+start_ticks = pygame.time.get_ticks()
 
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 score = 0
@@ -40,17 +40,55 @@ textsurface = myfont.render(str_score, False, (255, 255, 255))
 star_x = randint(20, 1260)
 star_y = randint(20, 700)
 
+start = True
 
-
-
+miku_back_image = pygame.image.load("Background.jpeg")
 
 x = 600
 y = 630
+
+
+normal_color = (200, 50, 150)
+on_color = (200, 100, 150)
+
+
+
+while start:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            start = False
+            carryOn = False
+
+            
+    window.blit(miku_back_image, (0, 0))
+    
+    mouse = pygame.mouse.get_pos()
+
+    if (mouse[0] >= 50 and mouse[0] <= 150 and mouse[1] >= 200 and mouse[1] <= 270):
+        pygame.draw.rect(window, on_color, [50, 200, 100, 70], 0)
+        if(pygame.mouse.get_pressed()[0]):
+            start = False
+            print("I'm out")
+            break
+
+    else: 
+        pygame.draw.rect(window, normal_color, [50, 200, 100, 70], 0)
+
+    pygame.display.flip()
+
+
+
+
+
 
 while carryOn:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             carryOn = False
+    seconds = (pygame.time.get_ticks()-start_ticks)/1000
+    #if(seconds > 10): carryOn = False
+    #print(seconds)    
 
     pressed = pygame.key.get_pressed()
 
@@ -59,7 +97,7 @@ while carryOn:
     x, y = move(pressed, lis, 3, x, y)
 
     miku_icon = pygame.image.load("miku_icon_resize.png")
-
+    
 
 
     star = pygame.image.load("star_resize.png")
@@ -69,16 +107,16 @@ while carryOn:
         star_x = randint(20, 1260)
         star_y = randint(20, 700)
     
-
+    #if(pygame.mouse.get_pressed()[0]): print("Yeah~")
     
     window.blit(Back_image, (0, 0))
+    #window.fill((0, 0, 0))
     window.blit(star, (star_x, star_y))
     window.blit(miku_icon, (x, y))
     window.blit(textsurface, (0, 0))
     
     pygame.display.flip()
 
-    clock.tick(60)
 
     
 pygame.quit()
