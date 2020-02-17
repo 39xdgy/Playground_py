@@ -6,13 +6,13 @@ class text_box:
         self.UAC = unactive_color
         self.AC = active_color
         self.text = ''
-
+    '''
     def __init__(self, position, unactive_color, active_color, input_text):
         self.position = position
         self.UAC = unactive_color
         self.AC = active_color
         self.text = input_text
-
+    '''
     def change_position(self, new_position):
         self.position = new_position
 
@@ -37,6 +37,9 @@ class text_box:
     def add_text(self, letter):
         self.text += letter
 
+    def delete_text(self):
+        self.text = self.text[:-1]
+        
     def return_text(self):
         return self.text
 
@@ -48,9 +51,9 @@ class text_box:
 
     def box_is_press(self, environment, mouse):
         if(self.return_position().collidepoint(mouse)):
-            self.draw_active_buttom(environment)
+            self.draw_active_box(environment)
             if(pygame.mouse.get_pressed()[0]):
                 return True
         else:
-            self.draw_unactive_buttom(environment)
+            self.draw_unactive_box(environment)
         return False
