@@ -1,6 +1,7 @@
 import pygame
 from item import item
 from buttom import buttom
+from text_box import text_box
 
 pygame.init()
 
@@ -131,6 +132,14 @@ while main_in:
     if(list_buttom.buttom_is_press(window, mouse)):
         main_in = False
 
-    create_item_buttom.buttom_is_press(window, mouse)
+    if(create_item_buttom.buttom_is_press(window, mouse)):
+        context = str(input("context: "))
+        level = int(input("level: "))
+        state = int(input("State: "))
+        color = str(input("color: "))
+        date = str(input("date: "))
+        thing = item(context, level, state, color, date)
+        thing.write_file("list.txt")
+        print("Done!")
         
     pygame.display.flip()

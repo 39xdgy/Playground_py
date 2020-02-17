@@ -1,0 +1,16 @@
+class text_box:
+
+    
+    def __init__(self, position, unactive_color, active_color):
+        self.position = position
+        self.UAC = unactive_color
+        self.AC = active_color
+        self.text = ''
+
+    def __init__(self, position, unactive_color, active_color, input_text):
+        self.position = position
+        self.UAC = unactive_color
+        self.AC = active_color
+        self.text = input_text
+
+    

@@ -35,3 +35,8 @@ class item:
 
     def return_DD(self):
         return self.DD
+
+    def write_file(self, file_name):
+        txt = open(file_name, "a")
+        txt.write(str(self.contect) + ", " + str(self.IL) + ", " + str(self.PS) + ", " + str(self.color) + ", " + str(self.DD) + "\n")
+        txt.close()
