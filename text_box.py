@@ -6,13 +6,7 @@ class text_box:
         self.UAC = unactive_color
         self.AC = active_color
         self.text = ''
-    '''
-    def __init__(self, position, unactive_color, active_color, input_text):
-        self.position = position
-        self.UAC = unactive_color
-        self.AC = active_color
-        self.text = input_text
-    '''
+    
     def change_position(self, new_position):
         self.position = new_position
 

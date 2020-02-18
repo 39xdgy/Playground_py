@@ -8,6 +8,7 @@ pygame.init()
 size = (1280, 720)
 white = (255, 255, 255)
 black = (0, 0, 0)
+textbox_active_color = (242, 179, 189) #Luka pink
 window = pygame.display.set_mode(size)
 pygame.display.set_caption("Listing System")
 
@@ -17,7 +18,7 @@ start_ticks = pygame.time.get_ticks()
 
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 LB = buttom(pygame.Rect([600, 480, 80, 40]), white, (170, 100, 230))
-textbox_active_color = (242, 179, 189) #Luka pink
+
 UI_active = False
 UI_text = ''
 PW_active = False
@@ -70,7 +71,7 @@ def break_line(input_string):
     
     return fin
 
-#log_in = False
+log_in = False
 
 while log_in:
 
@@ -141,7 +142,7 @@ while log_in:
     pygame.display.flip()
 
 
-
+sort_buttom = buttom(pygame.Rect([1150, 530, 80, 40]), white, black)
 create_item_buttom = buttom(pygame.Rect([1150, 580, 80, 40]), white, black)
 list_buttom = buttom(pygame.Rect([1150, 630, 80, 40]), white, black)
 
@@ -151,8 +152,19 @@ things =  []
 for line in txt_file:
     things.append(break_line(line))
 
-print(things)
 
+    
+list_box = []
+for i in range(0,2):
+    temp_box = text_box(pygame.Rect([20, 20+100*i, 510, 80]), white, textbox_active_color)
+    list_box.append(temp_box)
+    
+
+
+
+
+    
+    
 while main_in:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -165,12 +177,27 @@ while main_in:
 
     pygame.draw.line(window, white, (550, 0), (550, 720))
     pygame.draw.line(window, white, (1100, 0), (1100, 720))
-    
-    
+
+    for i in list_box:
+        if(i.box_is_press(window, mouse)):
+            print(i.return_position()[1])
+        
+
+    if(sort_buttom.buttom_is_press(window, mouse)):
+        continue
+            
     if(list_buttom.buttom_is_press(window, mouse)):
         main_in = False
 
     if(create_item_buttom.buttom_is_press(window, mouse)):
+        create_window_size = (500, 720)
+        create_window = pygame.display.set_mode(create_window_size)
+        is_create = True
+        while is_create:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    is_create = False
+        '''
         context = str(input("context: "))
         level = int(input("level: "))
         state = int(input("State: "))
@@ -181,5 +208,14 @@ while main_in:
         print("Done!\n")
         things.append(break_line(thing.string_form()))
         print(things)
-        
+        '''
+        temp_box = text_box(pygame.Rect([20, 20+100*(len(list_box)), 510, 80]), white, textbox_active_color)
+        list_box.append(temp_box)
+        window = pygame.display.set_mode(size)
+
+
+
+
+
+
     pygame.display.flip()
