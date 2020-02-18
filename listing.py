@@ -18,7 +18,7 @@ start_ticks = pygame.time.get_ticks()
 
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 LB = buttom(pygame.Rect([600, 480, 80, 40]), white, (170, 100, 230))
-
+item_elements = ['Context', 'Level', 'State', 'Color', 'Date']
 UI_active = False
 UI_text = ''
 PW_active = False
@@ -71,7 +71,61 @@ def break_line(input_string):
     
     return fin
 
-log_in = False
+
+def add_item_window(window):
+    create_window_size = (500, 600)
+    create_window = pygame.display.set_mode(create_window_size)
+    pygame.display.set_caption("Add item")
+    is_create = True
+    text_input_boxes = []
+    counter = 0
+    for i in item_elements:
+        temp_box = text_box(pygame.Rect([110, 10 + 80*counter, 380, 70]), white, textbox_active_color)
+        text_input_boxes.append(temp_box)
+        counter += 1
+    
+    while is_create:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                is_create = False
+        mouse = pygame.mouse.get_pos()
+        pressed = pygame.key.get_pressed()
+        for i in text_input_boxes:
+            i.box_is_press(create_window, mouse)
+            
+        pygame.display.flip()
+    '''
+    context = str(input("context: "))
+    level = int(input("level: "))
+    state = int(input("State: "))
+    color = str(input("color: "))
+    date = str(input("date: "))
+    thing = item(context, level, state, color, date)
+    thing.write_file("list.txt")
+    print("Done!\n")
+    things.append(break_line(thing.string_form()))
+    print(things)
+    '''
+    temp_box = text_box(pygame.Rect([20, 20+100*(len(list_box)), 510, 80]), white, textbox_active_color)
+    list_box.append(temp_box)
+    window = pygame.display.set_mode(size)
+    pygame.display.set_caption("Listing System")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#log_in = False
 
 while log_in:
 
@@ -119,26 +173,18 @@ while log_in:
     mouse = pygame.mouse.get_pos()
     pressed = pygame.key.get_pressed()
 
-    
-    
     if UI_active: UIP.draw_active_box(window)
     else: UIP.draw_unactive_box(window)
     if PW_active: PWP.draw_active_box(window)
     else: PWP.draw_unactive_box(window)
-    
-    UI_textsurface = myfont.render(UIP.return_text(), False, (0, 0, 0))
-    PW_textsurface = myfont.render(PW_show_text, False, (0, 0, 0))
-    window.blit(UI_textsurface, (UIP.return_position()[0]+2, UIP.return_position()[1]+4))
-    window.blit(PW_textsurface, (PWP.return_position()[0]+2, PWP.return_position()[1]+4))
 
+    UIP.write_in_box(window, myfont)
+    PWP.write_in_box_with_text(window, myfont, PW_show_text)
+    
     if(LB.buttom_is_press(window, mouse)):
         if(check_login(UIP.return_text(), PWP.return_text(), my_ID, my_PW)):
             log_in = False
-    '''
-            log_in = False
-            print("I'm out")
-    '''
-
+    LB.text_in_buttom(window, myfont, "Log in")
     pygame.display.flip()
 
 
@@ -185,35 +231,13 @@ while main_in:
 
     if(sort_buttom.buttom_is_press(window, mouse)):
         continue
-            
+    sort_buttom.text_in_buttom(window, myfont, "Sort")        
     if(list_buttom.buttom_is_press(window, mouse)):
         main_in = False
-
+    list_buttom.text_in_buttom(window, myfont, "Exit")
     if(create_item_buttom.buttom_is_press(window, mouse)):
-        create_window_size = (500, 720)
-        create_window = pygame.display.set_mode(create_window_size)
-        is_create = True
-        while is_create:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    is_create = False
-        '''
-        context = str(input("context: "))
-        level = int(input("level: "))
-        state = int(input("State: "))
-        color = str(input("color: "))
-        date = str(input("date: "))
-        thing = item(context, level, state, color, date)
-        thing.write_file("list.txt")
-        print("Done!\n")
-        things.append(break_line(thing.string_form()))
-        print(things)
-        '''
-        temp_box = text_box(pygame.Rect([20, 20+100*(len(list_box)), 510, 80]), white, textbox_active_color)
-        list_box.append(temp_box)
-        window = pygame.display.set_mode(size)
-
-
+        add_item_window(window)
+    create_item_buttom.text_in_buttom(window, myfont, "Add")
 
 
 

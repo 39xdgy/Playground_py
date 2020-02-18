@@ -39,3 +39,7 @@ class buttom:
         else:
             self.draw_unactive_buttom(environment)
         return False
+
+    def text_in_buttom(self, environment, font, text):
+        text_surface = font.render(text, False, (0, 0, 0))
+        environment.blit(text_surface, (self.return_position()[0]+2, self.return_position()[1]+4))

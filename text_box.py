@@ -51,3 +51,11 @@ class text_box:
         else:
             self.draw_unactive_box(environment)
         return False
+
+    def write_in_box(self, environment, font):
+        text_surface = font.render(self.return_text(), False, (0, 0, 0))
+        environment.blit(text_surface, (self.return_position()[0] + 2, self.return_position()[1] + 4))
+
+    def write_in_box_with_text(self, environment, font, input_text):
+        text_surface = font.render(input_text, False, (0, 0, 0))
+        environment.blit(text_surface, (self.return_position()[0] + 2, self.return_position()[1] + 4))
