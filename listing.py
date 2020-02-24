@@ -72,17 +72,26 @@ def break_line(input_string):
     return fin
 
 
-def add_item_window(window):
+def add_item_window():
     create_window_size = (500, 600)
     create_window = pygame.display.set_mode(create_window_size)
     pygame.display.set_caption("Add item")
     is_create = True
+    text_input_labels = []
     text_input_boxes = []
     counter = 0
     for i in item_elements:
         temp_box = text_box(pygame.Rect([110, 10 + 80*counter, 380, 70]), white, textbox_active_color)
         text_input_boxes.append(temp_box)
+
+        text_surface = myfont.render(i, False, (255, 255, 255))
+        text_input_labels.append(text_surface)
         counter += 1
+
+    Ok_buttom = buttom(pygame.Rect([50, 420, 130, 70]), white, black)
+    Cancel_buttom = buttom(pygame.Rect([280, 420, 130, 70]), white, black)
+
+
     
     while is_create:
         for event in pygame.event.get():
@@ -92,7 +101,14 @@ def add_item_window(window):
         pressed = pygame.key.get_pressed()
         for i in text_input_boxes:
             i.box_is_press(create_window, mouse)
-            
+
+        x = 0
+        for i in text_input_labels:
+            create_window.blit(i, (20, 35 + 80*x ))
+            x += 1
+
+        Ok_buttom.buttom_is_press(create_window, mouse)
+        Cancel_buttom.buttom_is_press(create_window, mouse)
         pygame.display.flip()
     '''
     context = str(input("context: "))
@@ -125,7 +141,7 @@ def add_item_window(window):
 
 
 
-#log_in = False
+log_in = False
 
 while log_in:
 
@@ -236,7 +252,7 @@ while main_in:
         main_in = False
     list_buttom.text_in_buttom(window, myfont, "Exit")
     if(create_item_buttom.buttom_is_press(window, mouse)):
-        add_item_window(window)
+        add_item_window()
     create_item_buttom.text_in_buttom(window, myfont, "Add")
 
 
