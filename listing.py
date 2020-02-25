@@ -90,40 +90,69 @@ def add_item_window():
 
     Ok_buttom = buttom(pygame.Rect([50, 420, 130, 70]), white, black)
     Cancel_buttom = buttom(pygame.Rect([280, 420, 130, 70]), white, black)
-
-
     
+    temp_box = text_box(pygame.Rect([20, 20+100*(len(list_box)), 510, 80]), white, textbox_active_color)
+
+    is_cancel = False
     while is_create:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_create = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in text_input_boxes:
+                    if i.return_position().collidepoint(event.pos):
+                        i.change_is_active(True)
+                    else:
+                        i.change_is_active(False)
+            if event.type == pygame.KEYDOWN:
+                for i in text_input_boxes:
+                    if i.return_is_active():
+                        if event.key == pygame.K_BACKSPACE:
+                            i.delete_text()
+                        else:
+                            i.add_text(event.unicode)
         mouse = pygame.mouse.get_pos()
         pressed = pygame.key.get_pressed()
         for i in text_input_boxes:
-            i.box_is_press(create_window, mouse)
+            if i.return_is_active():
+                i.draw_active_box(create_window)
+            else:
+                i.draw_unactive_box(create_window)
+            i.write_in_box(create_window, myfont)
 
         x = 0
         for i in text_input_labels:
-            create_window.blit(i, (20, 35 + 80*x ))
+            create_window.blit(i, (20, 35 + 80 * x ))
             x += 1
 
-        Ok_buttom.buttom_is_press(create_window, mouse)
-        Cancel_buttom.buttom_is_press(create_window, mouse)
+        
+
+        
+        if(Ok_buttom.buttom_is_press(create_window, mouse)):
+            new_thing = []
+            for i in text_input_boxes:
+                new_thing.append(i.return_text())
+
+            context, level, state, color, date = new_thing
+            new_thing = item(context, level, state, color, date)
+            new_thing.write_file("list.txt")
+            things.append(new_thing)
+            temp_box = text_box(pygame.Rect([20, 35 + 80*len(things), 510, 80]), white, textbox_active_color)
+            temp_box.change_text(new_thing.string_form())
+            is_create = False
+            print("Done")
+        if(Cancel_buttom.buttom_is_press(create_window, mouse)):
+            is_cancel = True
+            is_create = False
+        Ok_buttom.text_in_buttom(create_window, myfont, "Ok")
+        Cancel_buttom.text_in_buttom(create_window, myfont, "Cancel")
+        
+        
         pygame.display.flip()
-    '''
-    context = str(input("context: "))
-    level = int(input("level: "))
-    state = int(input("State: "))
-    color = str(input("color: "))
-    date = str(input("date: "))
-    thing = item(context, level, state, color, date)
-    thing.write_file("list.txt")
-    print("Done!\n")
-    things.append(break_line(thing.string_form()))
-    print(things)
-    '''
-    temp_box = text_box(pygame.Rect([20, 20+100*(len(list_box)), 510, 80]), white, textbox_active_color)
-    list_box.append(temp_box)
+
+    if not is_cancel:
+        list_box.append(temp_box)
     window = pygame.display.set_mode(size)
     pygame.display.set_caption("Listing System")
 
@@ -141,7 +170,7 @@ def add_item_window():
 
 
 
-log_in = False
+#log_in = False
 
 while log_in:
 
@@ -152,24 +181,24 @@ while log_in:
             main_in = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if UIP.return_position().collidepoint(event.pos):
-                UI_active = True
-                PW_active = False
+                UIP.change_is_active(True)
+                PWP.change_is_active(False)
             elif PWP.return_position().collidepoint(event.pos):
-                PW_active = True
-                UI_active = False
+                PWP.change_is_active(True)
+                UIP.change_is_active(False)
             else:
-                UI_active = False
-                PW_active = False
+                UIP.change_is_active(False)
+                PWP.change_is_active(False)
         if event.type == pygame.KEYDOWN:
-            if UI_active:
+            if UIP.return_is_active():
                 if event.key == pygame.K_BACKSPACE:
                     UIP.delete_text()
                 elif event.key == pygame.K_TAB:
-                    PW_active = True
-                    UI_active = False
+                    PWP.change_is_active(True)
+                    UIP.change_is_active(False)
                 else:
                     UIP.add_text(event.unicode)
-            elif PW_active:
+            elif PWP.return_is_active():
                 if event.key == pygame.K_BACKSPACE:
                     PWP.delete_text()
                     PW_show_text = PW_show_text[:-1]
@@ -181,7 +210,7 @@ while log_in:
                     if not (event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT):
                         PW_show_text += '*'
             elif event.key == pygame.K_TAB:
-                UI_active = True
+                UIP.change_is_active(True)
                         
             
     window.fill((0, 0, 0))
@@ -189,9 +218,9 @@ while log_in:
     mouse = pygame.mouse.get_pos()
     pressed = pygame.key.get_pressed()
 
-    if UI_active: UIP.draw_active_box(window)
+    if UIP.return_is_active(): UIP.draw_active_box(window)
     else: UIP.draw_unactive_box(window)
-    if PW_active: PWP.draw_active_box(window)
+    if PWP.return_is_active(): PWP.draw_active_box(window)
     else: PWP.draw_unactive_box(window)
 
     UIP.write_in_box(window, myfont)
@@ -210,16 +239,20 @@ list_buttom = buttom(pygame.Rect([1150, 630, 80, 40]), white, black)
 
 txt_file = open("list.txt", "r")
 things =  []
-
+list_box = []
 for line in txt_file:
-    things.append(break_line(line))
+    contect, level, state, color, date = break_line(line)
+    things.append(item(contect, level, state, color, date))
 
 
     
-list_box = []
-for i in range(0,2):
-    temp_box = text_box(pygame.Rect([20, 20+100*i, 510, 80]), white, textbox_active_color)
+
+num_of_item = 0
+for i in things:
+    temp_box = text_box(pygame.Rect([20, 20+100*num_of_item, 510, 80]), white, textbox_active_color)
+    temp_box.change_text(i.string_form())
     list_box.append(temp_box)
+    num_of_item += 1
     
 
 
@@ -243,6 +276,7 @@ while main_in:
     for i in list_box:
         if(i.box_is_press(window, mouse)):
             print(i.return_position()[1])
+        i.write_in_box(window, myfont)
         
 
     if(sort_buttom.buttom_is_press(window, mouse)):
